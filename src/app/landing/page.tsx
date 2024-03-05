@@ -1,4 +1,4 @@
-import { Box, Typography, Container, Button } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import Link from "next/link";
 
 const LandingPage = () => {
@@ -10,7 +10,7 @@ const LandingPage = () => {
       </Box>
       <Box className="flex flex-col gap-3">
         <Button variant="contained" color="primary">
-          <Link href={"/signin"}>Sign up</Link>
+          <Link href={"/signup"}>Sign up</Link>
         </Button>
         <Button variant="contained" color="primary">
           Sign In

@@ -1,6 +1,10 @@
 "use client";
-
 import { Box, Button, TextField, Typography } from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Link from "next/link";
 import { useState } from "react";
@@ -12,18 +16,43 @@ const SignUpPage = () => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isRegisteredFail, setIsRegisteredFail] = useState<boolean>(false);
   const handleSignInClick = async () => {
     try {
-      await register({
+      const registeredResponse = await register({
         name,
         lastname,
         username,
         password,
         email,
       });
+
+      switch (registeredResponse.statusCode) {
+        case 201:
+          setIsRegisteredFail(false);
+          break;
+        case 400:
+          setIsRegisteredFail(true);
+          break;
+      }
     } catch (error) {
       console.error("Error during sign in:", error);
     }
+  };
+
+  const realClick = (statusCode: 201 | 400) => {
+    switch (statusCode) {
+      case 201:
+        setIsRegisteredFail(false);
+        break;
+      case 400:
+        setIsRegisteredFail(true);
+        break;
+    }
+  };
+
+  const closeFailedRegisterDialog = () => {
+    setIsRegisteredFail(false);
   };
   return (
     <Box className="w-screen min-h-screen h-full flex flex-col items-center gap-8">
@@ -84,6 +113,23 @@ const SignUpPage = () => {
           Send
         </Button>
       </form>
+      <Box>
+        <Dialog
+          open={isRegisteredFail}
+          aria-labelledby="Failed Register"
+          aria-describedby="Failed Register"
+        >
+          <DialogTitle id="alert-dialog-title">{"Register Failed"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              All fields are required and username and email are unique.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeFailedRegisterDialog}>Close</Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
     </Box>
   );
 };

@@ -1,5 +1,3 @@
-"use client";
-import "dotenv/config";
 import { CreateUserCommand } from "../domain";
 
 interface SuccessfullResponse {
@@ -7,11 +5,16 @@ interface SuccessfullResponse {
   statusCode: 201;
 }
 
+interface FailedResponse {
+  message: string;
+  statusCode: 400;
+}
+
 export const register = async (
   command: CreateUserCommand
-): Promise<SuccessfullResponse> => {
+): Promise<SuccessfullResponse | FailedResponse> => {
   try {
-    const dataFetched = await fetch(`${process.env.ROOT_LOCAL_URL}/user`, {
+    const dataFetched = await fetch(`http://localhost:3000/user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -19,7 +22,15 @@ export const register = async (
       body: JSON.stringify(command),
     });
 
-    return (await dataFetched.json()) as SuccessfullResponse;
+    const data = (await dataFetched.json()) as
+      | SuccessfullResponse
+      | FailedResponse;
+
+    if (data.statusCode === 400) {
+      return data;
+    }
+
+    return data;
   } catch (error) {
     throw error;
   }

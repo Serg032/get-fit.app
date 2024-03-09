@@ -23,8 +23,6 @@ const SignInPage = () => {
         password,
       });
 
-      console.log(response);
-
       switch (response.flag) {
         case true:
           setIsRegisteredFail(false);

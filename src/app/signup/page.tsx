@@ -9,6 +9,8 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Link from "next/link";
 import { useState } from "react";
 import { register } from "../entities/users/app/register";
+// import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const SignUpPage = () => {
   const [name, setName] = useState<string>("");
@@ -17,6 +19,7 @@ const SignUpPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isRegisteredFail, setIsRegisteredFail] = useState<boolean>(false);
+  const router = useRouter();
   const handleSignInClick = async () => {
     try {
       const registeredResponse = await register({
@@ -30,6 +33,8 @@ const SignUpPage = () => {
       switch (registeredResponse.statusCode) {
         case 201:
           setIsRegisteredFail(false);
+          // redirect("/home");
+          router.push("/home");
           break;
         case 400:
           setIsRegisteredFail(true);

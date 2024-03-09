@@ -8,30 +8,30 @@ import DialogTitle from "@mui/material/DialogTitle";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Link from "next/link";
 import { useState } from "react";
-import { register } from "../entities/users/app/register";
+import { login } from "../entities/users/app/login";
+import { useRouter } from "next/navigation";
 
-const SignUpPage = () => {
-  const [name, setName] = useState<string>("");
-  const [lastname, setLastname] = useState<string>("");
+const SignInPage = () => {
   const [username, setUsername] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isRegisteredFail, setIsRegisteredFail] = useState<boolean>(false);
+  const router = useRouter();
   const handleSignInClick = async () => {
     try {
-      const registeredResponse = await register({
-        name,
-        lastname,
+      const response = await login({
         username,
         password,
-        email,
       });
 
-      switch (registeredResponse.statusCode) {
-        case 201:
+      console.log(response);
+
+      switch (response.flag) {
+        case true:
           setIsRegisteredFail(false);
+          localStorage.setItem("token", response.token);
+          router.push("home");
           break;
-        case 400:
+        case false:
           setIsRegisteredFail(true);
           break;
       }
@@ -53,34 +53,9 @@ const SignUpPage = () => {
         </Button>
       </Box>
       <Typography className="p-1" variant="h4">
-        Sign Up
+        Sign In
       </Typography>
       <form className="w-screen flex flex-col items-center gap-5 p-4">
-        <Box className="flex flex-col gap-1">
-          <TextField
-            label="Name"
-            variant="outlined"
-            required={true}
-            onChange={(event) => setName(event.target.value)}
-          />
-        </Box>
-        <Box className="flex flex-col gap-1">
-          <TextField
-            label="LastName"
-            variant="outlined"
-            required={true}
-            onChange={(event) => setLastname(event.target.value)}
-          />
-        </Box>
-        <Box className="flex flex-col gap-1">
-          <TextField
-            label="email"
-            variant="outlined"
-            required={true}
-            type="email"
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </Box>
         <Box className="flex flex-col gap-1">
           <TextField
             label="username"
@@ -123,4 +98,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default SignInPage;

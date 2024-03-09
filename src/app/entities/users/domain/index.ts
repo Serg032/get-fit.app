@@ -7,3 +7,5 @@ interface User {
 }
 
 export interface CreateUserCommand extends User {}
+
+export type LoginCommand = Omit<User, "name" | "lastname" | "email">;

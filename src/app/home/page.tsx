@@ -1,8 +1,9 @@
 "use client";
-import { Box } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { authenticateUser } from "../auth/authenticate-user";
 import { useRouter } from "next/navigation";
+import { Add, ListOutlined } from "@mui/icons-material";
 
 const HomePage = () => {
   const router = useRouter();
@@ -24,7 +25,20 @@ const HomePage = () => {
     });
   }, [router]);
 
-  return <Box>home</Box>;
+  return (
+    <Box className="w-full h-screen flex justify-center items-center">
+      <Box className="w-full h-screen flex flex-col gap-10 justify-center items-center">
+        <Button type="button" variant="outlined" className="w-44 flex gap-5">
+          <Add />
+          <Typography>Add new workout</Typography>
+        </Button>
+        <Button type="button" variant="outlined" className="w-44 flex gap-5">
+          <ListOutlined />
+          <Typography>My workouts</Typography>
+        </Button>
+      </Box>
+    </Box>
+  );
 };
 
 export default HomePage;

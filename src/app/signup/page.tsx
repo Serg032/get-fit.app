@@ -114,7 +114,9 @@ const SignUpPage = () => {
           <DialogTitle id="alert-dialog-title">{"Register Failed"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              All fields are required and username and email are unique.
+              <Typography>
+                All fields are required and username and email are unique.
+              </Typography>
             </DialogContentText>
           </DialogContent>
           <DialogActions>

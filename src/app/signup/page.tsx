@@ -8,8 +8,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Link from "next/link";
 import { useState } from "react";
-import { register } from "../entities/users/app/register";
 import { useRouter } from "next/navigation";
+import { register } from "../entities/users/app/register";
 
 const SignUpPage = () => {
   const [name, setName] = useState<string>("");

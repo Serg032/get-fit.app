@@ -11,12 +11,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { authenticateUser } from "../services/auth/authenticate-user";
 import { ExerciseService } from "../services/exercise-service";
-import { Exercise } from "../entities/exercise/domain";
+import { Exercise, Method } from "../entities/exercise/domain";
 
 const NewWorkout = () => {
   const exerciseService = new ExerciseService();
   const router = useRouter();
   const [allExercices, setAllExercises] = useState<Exercise[]>([]);
+  const [allMehods, setAllMethods] = useState<Method[]>([]);
   const [exerciseAddedCounter, setExerciseAddedCounter] = useState<number[]>(
     []
   );

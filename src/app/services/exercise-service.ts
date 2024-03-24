@@ -12,4 +12,19 @@ export class ExerciseService {
       throw error;
     }
   }
+
+  public async getByName(name: string) {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/exercise/name/${name}`,
+        {
+          method: "GET",
+        }
+      );
+
+      return (await response.json()) as Exercise | undefined;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

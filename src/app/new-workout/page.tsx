@@ -11,16 +11,20 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { authenticateUser } from "../services/auth/authenticate-user";
 import { ExerciseService } from "../services/exercise-service";
-import { Exercise, Method } from "../entities/exercise/domain";
+import { Exercise } from "../entities/exercise/domain";
+import { ModeService } from "../services/mode-service";
+import { Mode } from "../entities/mode/domain";
 
 const NewWorkout = () => {
   const exerciseService = new ExerciseService();
+  const methodService = new ModeService();
   const router = useRouter();
   const [allExercices, setAllExercises] = useState<Exercise[]>([]);
-  const [allMehods, setAllMethods] = useState<Method[]>([]);
+  const [allMethods, setAllModes] = useState<Mode[]>([]);
   const [exerciseAddedCounter, setExerciseAddedCounter] = useState<number[]>(
     []
   );
+  const [exercice, setExercise] = useState<Exercise>();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -30,7 +34,6 @@ const NewWorkout = () => {
     }
     async function fetchData() {
       try {
-        // Authenticate user
         if (token) {
           const authResponse = await authenticateUser(token);
 
@@ -39,11 +42,11 @@ const NewWorkout = () => {
             return;
           }
         }
-
-        // Fetch exercises
         const exercises = await exerciseService.getAll();
         setAllExercises(exercises);
-        console.log(allExercices);
+        const modes = await methodService.getAll();
+        console.log(modes);
+        setAllModes(modes);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -56,6 +59,15 @@ const NewWorkout = () => {
     setExerciseAddedCounter([...exerciseAddedCounter, 1]);
   };
 
+  const handleOnChangeExercise = async (exerciseName: string) => {
+    const exercice = await exerciseService.getByName(exerciseName);
+    if (!exercice) {
+      alert("Error at set an exercise");
+    }
+
+    setExercise(exercice);
+  };
+
   return (
     <Box className="w-full min-h-screen flex flex-col gap-5">
       <Box className="w-full h-14 flex flex-col gap-3 p-5">
@@ -66,9 +78,9 @@ const NewWorkout = () => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={count}
+                value={exercice ? exercice.name : ""}
                 label="Exercise"
-                onChange={() => undefined}
+                onChange={(event) => handleOnChangeExercise(event.target.value)}
               >
                 {allExercices.map((exercice) => (
                   <MenuItem key={exercice.name} value={exercice.name}>
@@ -86,9 +98,9 @@ const NewWorkout = () => {
                 label="Method"
                 onChange={() => undefined}
               >
-                {allExercices.map((exercice) => (
-                  <MenuItem key={exercice.name} value={exercice.name}>
-                    {exercice.name}
+                {allMethods.map((mode) => (
+                  <MenuItem key={mode.name} value={mode.name}>
+                    {mode.name}
                   </MenuItem>
                 ))}
               </Select>
